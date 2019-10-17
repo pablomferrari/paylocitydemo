@@ -1,0 +1,29 @@
+<h4>Employee Page</h4>
+
+<table class='table table-striped' aria-labelledby="employees" *ngIf="employees">
+    <thead>
+      <tr>
+        <th>First</th>
+        <th>Last</th>
+        <th>Salary</th>
+        <th>
+            <button type="button" class="btn btn-dark col-md-3" (click)="addEmployee()">Add</button></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let employee of employees | async">
+        <td>{{ employee.firstName }}</td>
+        <td>{{ employee.lastName }}</td>
+        <td>{{ employee.salary | currency}}</td>
+        <td><a class="col-1-4" routerLink="/employee/detail/{{employee.id}}">View</a></td>
+      </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+  </table>
