@@ -1,39 +1,63 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using PaylocityDemo.Api.ViewModels;
+using PaylocityDemo.Business.Employees;
+using PaylocityDemo.Business.Payroll;
+using PaylocityDemo.Business.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PaylocityDemo.Business.Employees;
-using PaylocityDemo.Domain.Models;
 using Employee = PaylocityDemo.Business.Employees.Employee;
 
 namespace PaylocityDemo.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class EmployeesController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IEmployeeComponent _employeeComponent;
+        private readonly IPayrollService _payrollService;
 
-        public EmployeesController(IEmployeeComponent employeeComponent)
+        public EmployeesController(
+            IMapper mapper,
+            IEmployeeComponent employeeComponent, 
+            IPayrollService payrollService
+        )
         {
+            _mapper = mapper;
             _employeeComponent = employeeComponent;
+            _payrollService = payrollService;
         }
 
         // GET: api/Employees
+        // get all employees
+        // eventualy could be parameterized to allow for paging
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployee()
+        public async Task<ActionResult<IEnumerable<EmployeeLite>>> GetEmployee()
         {
-            return Ok(await _employeeComponent.GetAllAsync());
+            try
+            {
+                var employees = await _employeeComponent.GetAllAsync();
+                var vm = employees.Select(x =>  _mapper.Map<EmployeeLite>(x));
+                return Ok(vm);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
-        // GET: api/Employees/5
+        // GET: api/Employees/5        
         [HttpGet("{id}")]
         public async Task<ActionResult<Employee>> GetEmployee(int id)
         {
             var employee = await _employeeComponent.GetAsync(id);
+
 
             if (employee == null)
             {
@@ -43,69 +67,48 @@ namespace PaylocityDemo.Api.Controllers
             return employee;
         }
 
-        //// PUT: api/Employees/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        //// more details see https://aka.ms/RazorPagesCRUD.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutEmployee(int id, Employee employee)
-        //{
-        //    if (id != employee.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        // PUT: api/Employees/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutEmployee(int id, Employee employee)
+        {
+            if (id != employee.Id)
+            {
+                return BadRequest();
+            }
 
-        //    _context.Entry(employee).State = EntityState.Modified;
+            var result = await _employeeComponent.UpdateAsync(employee);
+            return Ok(result);
+        }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!EmployeeExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+        // POST: api/Employees
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPost]
+        public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
+        {
+            var result = await _employeeComponent.AddAsync(employee);
+            return Ok(result);
+        }
 
-        //    return NoContent();
-        //}
+        [HttpGet("paycheck/{id}")]
+        public async Task<ActionResult<Employee>> GetPaycheck(int id)
+        {
+            var employee = await _employeeComponent.GetAsync(id);  
 
-        //// POST: api/Employees
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        //// more details see https://aka.ms/RazorPagesCRUD.
-        //[HttpPost]
-        //public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
-        //{
-        //    _context.Employee.Add(employee);
-        //    await _context.SaveChangesAsync();
+            var paycheck = _employeeComponent.GetPayCheck(employee);
 
-        //    return CreatedAtAction("GetEmployee", new { id = employee.Id }, employee);
-        //}
+            var vm = new PaycheckViewModel
+            {
+                FullName = $"{employee.FirstName} {employee.LastName}",
+                BenefitCost = paycheck.BenefitCost,
+                Salary = paycheck.Salary  ,
+                Total = paycheck.Total
+            };
 
-        //// DELETE: api/Employees/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Employee>> DeleteEmployee(int id)
-        //{
-        //    var employee = await _context.Employee.FindAsync(id);
-        //    if (employee == null)
-        //    {
-        //        return NotFound();
-        //    }
+            return Ok(vm);
 
-        //    _context.Employee.Remove(employee);
-        //    await _context.SaveChangesAsync();
+        }
 
-        //    return employee;
-        //}
 
-        //private bool EmployeeExists(int id)
-        //{
-        //    return _context.Employee.Any(e => e.Id == id);
-        //}
     }
 }

@@ -8,9 +8,9 @@ namespace PaylocityDemo.Domain.Employees
 {
     public interface IEmployeeRepository
     {
-        Task<int> AddEmployeeAsync(Employee employee);
-
         Task<IEnumerable<Employee>> GetAllAsync();
         Task<Employee> GetAsync(int id);
+        Task<Employee> AddAsync(Employee employee);
+        Task<Employee> UpdateAsync(Employee employee);
     }
 }

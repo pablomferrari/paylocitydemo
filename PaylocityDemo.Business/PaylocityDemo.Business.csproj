@@ -8,15 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dependents\DependentComponent.cs" />
+    <Compile Remove="Dependents\IDependentComponent.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PaylocityDemo.Data\PaylocityDemo.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Payroll\" />
   </ItemGroup>
 
 </Project>

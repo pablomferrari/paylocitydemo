@@ -36,6 +36,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\WeatherForecastController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PaylocityDemo.Business\PaylocityDemo.Business.csproj" />
     <ProjectReference Include="..\PaylocityDemo.Data\PaylocityDemo.Domain.csproj" />
   </ItemGroup>

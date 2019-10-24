@@ -1,0 +1,10 @@
+<div *ngIf="paycheck">
+    <ul>
+        <li>Name: {{paycheck.fullName}}</li>
+        <li>Benefit Cost: {{paycheck.benefitCost | currency}}</li>
+        <li>Salary: {{paycheck.salary | currency}}</li>
+        <li>Total: {{paycheck.total | currency}}</li>
+    </ul>
+    <button class="btn btn-dark col-md-2 offset-md-1" (click)="goBack()">Back</button>
+</div>
+

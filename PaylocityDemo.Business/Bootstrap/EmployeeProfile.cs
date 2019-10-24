@@ -7,8 +7,8 @@ namespace PaylocityDemo.Business.Bootstrap
     {
         public EmployeeProfile()
         {
-            CreateMap<Employee, Domain.Models.Employee>()                
-                .ReverseMap();
+            CreateMap<Domain.Models.Employee, Employee>().ReverseMap();
+            CreateMap<Domain.Models.Employee, EmployeeLite>();
         }
     }
 }

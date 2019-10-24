@@ -1,0 +1,6 @@
+<ul class="col-md-4">
+    <li *ngFor="let dependent of dependents">
+        <input type="text" class="form-control" [(ngModel)]="dependent.dependentName" placeholder="Name">
+        <br/>
+    </li>
+</ul>

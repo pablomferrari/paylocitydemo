@@ -7,7 +7,7 @@ namespace PaylocityDemo.Domain.Models
     {
         public Employee()
         {
-            Dependent = new HashSet<Dependent>();
+            Dependents = new HashSet<Dependent>();
         }
 
         public int Id { get; set; }
@@ -18,6 +18,6 @@ namespace PaylocityDemo.Domain.Models
         public int? BenefitId { get; set; }
 
         public virtual Benefit Benefit { get; set; }
-        public virtual ICollection<Dependent> Dependent { get; set; }
+        public virtual ICollection<Dependent> Dependents { get; set; }
     }
 }

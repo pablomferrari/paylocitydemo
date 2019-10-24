@@ -6,8 +6,10 @@
         <th>First</th>
         <th>Last</th>
         <th>Salary</th>
-        <th>
-            <button type="button" class="btn btn-dark col-md-3" (click)="addEmployee()">Add</button></th>
+        <th colspan="2">
+            <a class="col-1-4" routerLink="/employee/detail/" class="btn btn-primary">Add</a>
+        </th>
+        
       </tr>
     </thead>
     <tbody>
@@ -16,6 +18,7 @@
         <td>{{ employee.lastName }}</td>
         <td>{{ employee.salary | currency}}</td>
         <td><a class="col-1-4" routerLink="/employee/detail/{{employee.id}}">View</a></td>
+        <td><a class="col-1-4" routerLink="/employee/detail/paycheck/{{employee.id}}">Paycheck</a></td>
       </tr>
     </tbody>
     <tfoot>

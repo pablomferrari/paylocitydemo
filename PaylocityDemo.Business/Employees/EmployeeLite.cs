@@ -1,19 +1,14 @@
-﻿using PaylocityDemo.Business.Dependents;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace PaylocityDemo.Business.Employees
 {
-    public class Employee
+    public class EmployeeLite
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public decimal BenefitDiscount { get; set; }
         public decimal Salary { get; set; }
-        public int? BenefitId { get; set; }
-
-        public IEnumerable<Dependent> Dependents { get; set; }
     }
 }

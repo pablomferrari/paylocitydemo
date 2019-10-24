@@ -8,6 +8,6 @@ namespace PaylocityDemo.Domain.Dependents
 {
     public interface IDependentRepository
     {
-        Task<int> AddDependentAsync(Dependent dependent);
+        Task<IEnumerable<Dependent>> UpsertAsync(ICollection<Domain.Models.Dependent> dependents);
     }
 }

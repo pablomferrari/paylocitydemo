@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PaylocityDemo.Domain.Models;
@@ -14,11 +15,11 @@ namespace PaylocityDemo.Domain.Employees
         {
             _context = context;
         }
-        public async Task<int> AddEmployeeAsync(Employee employee)
+        public async Task<Employee> AddAsync(Employee employee)
         {
             var result = await _context.AddAsync<Employee>(employee);
             await _context.SaveChangesAsync();
-            return result.Entity.Id;
+            return result.Entity;
         }
 
         public async Task<IEnumerable<Employee>> GetAllAsync()
@@ -28,7 +29,16 @@ namespace PaylocityDemo.Domain.Employees
 
         public async Task<Employee> GetAsync(int id)
         {
-            return await _context.Employees.FindAsync(id);
+            var employee = await _context.Employees.FindAsync(id);
+            employee.Dependents = await _context.Dependents.Where(x => x.EmployeeId == id).ToListAsync();
+            return employee;
+        }
+
+        public async Task<Employee> UpdateAsync(Employee employee)
+        {
+            var result = _context.Update<Employee>(employee);
+            await _context.SaveChangesAsync();
+            return result.Entity;
         }
     }
 }

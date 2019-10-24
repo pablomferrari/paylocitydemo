@@ -16,7 +16,4 @@ export class EmployeeListComponent implements OnInit {
   ngOnInit() {
       this.employees = this.employeeApiService.getEmployees();
   }
-
-  public addEmployee() {    
-  }
 }

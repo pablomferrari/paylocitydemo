@@ -30,23 +30,23 @@ namespace PaylocityDemo.Domain.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Benefit>(entity =>
-            {
-                entity.ToTable("benefit");
+            //modelBuilder.Entity<Benefit>(entity =>
+            //{
+            //    entity.ToTable("benefit");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+            //    entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.BenefitType).HasColumnName("benefit_type");
+            //    entity.Property(e => e.BenefitType).HasColumnName("benefit_type");
 
-                entity.Property(e => e.Cost)
-                    .HasColumnName("cost")
-                    .HasColumnType("smallmoney");
+            //    entity.Property(e => e.Cost)
+            //        .HasColumnName("cost")
+            //        .HasColumnType("smallmoney");
 
-                entity.Property(e => e.Description)
-                    .HasColumnName("description")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
+            //    entity.Property(e => e.Description)
+            //        .HasColumnName("description")
+            //        .HasMaxLength(50)
+            //        .IsUnicode(false);
+            //});
 
             modelBuilder.Entity<Dependent>(entity =>
             {
@@ -68,14 +68,8 @@ namespace PaylocityDemo.Domain.Models
 
                 entity.Property(e => e.EmployeeId).HasColumnName("employee_id");
 
-                entity.HasOne(d => d.Benefit)
-                    .WithMany(p => p.Dependent)
-                    .HasForeignKey(d => d.BenefitId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dependent_benefit");
-
                 entity.HasOne(d => d.Employee)
-                    .WithMany(p => p.Dependent)
+                    .WithMany(p => p.Dependents)
                     .HasForeignKey(d => d.EmployeeId)
                     .HasConstraintName("FK_dependent_employee");
             });

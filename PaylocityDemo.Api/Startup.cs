@@ -12,6 +12,7 @@ using PaylocityDemo.Domain.Models;
 using PaylocityDemo.Domain.Employees;
 using AutoMapper;
 using PaylocityDemo.Business.Bootstrap;
+using PaylocityDemo.Business.Services;
 
 namespace PaylocityDemo.Api
 {
@@ -28,6 +29,7 @@ namespace PaylocityDemo.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<PaylocityContext>(options =>
+            //read db connection
             options.UseSqlServer(Configuration.GetConnectionString("PaylocityDatabase")));
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
@@ -36,8 +38,10 @@ namespace PaylocityDemo.Api
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            services.AddAutoMapper(typeof(EmployeeProfile));
+            services.AddAutoMapper(typeof(Business.Bootstrap.EmployeeProfile));
+            services.AddAutoMapper(typeof(Api.Bootstrap.EmployeeProfile));
             services.AddAutoMapper(typeof(DependentProfile));
+
             RegisterDependencies(services);
 
 
@@ -91,8 +95,9 @@ namespace PaylocityDemo.Api
         private void RegisterDependencies(IServiceCollection services)
         {
             services.AddScoped<IEmployeeComponent, EmployeeComponent>();
-            // services.AddScoped<IDependentComponent, DependentComponent>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IPayrollService, PayrollService>();
+            services.AddScoped<IBenefitEvaluator, BenefitEvaluator>();
         }
     }
 }
